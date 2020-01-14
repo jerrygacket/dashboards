@@ -3,11 +3,11 @@
 /* @var $this \yii\web\View */
 /* @var $content string */
 
-use app\widgets\Alert;
-use yii\helpers\Html;
-use yii\bootstrap\Nav;
-use yii\bootstrap\NavBar;
-use yii\widgets\Breadcrumbs;
+use yii\bootstrap4\Alert;
+use yii\bootstrap4\Breadcrumbs;
+use \yii\bootstrap4\Html;
+use yii\bootstrap4\Nav;
+use yii\bootstrap4\NavBar;
 use app\assets\AppAsset;
 
 AppAsset::register($this);
@@ -32,27 +32,33 @@ AppAsset::register($this);
         'brandLabel' => Yii::$app->name,
         'brandUrl' => Yii::$app->homeUrl,
         'options' => [
-            'class' => 'navbar-inverse navbar-fixed-top',
+            'class' => 'navbar navbar-expand-lg navbar-dark elegant-color-dark',
         ],
     ]);
     echo Nav::widget([
-        'options' => ['class' => 'navbar-nav navbar-right'],
+        'options' => ['class' => 'navbar-nav ml-auto'],
         'items' => [
-            ['label' => 'Home', 'url' => ['/site/index']],
-            ['label' => 'About', 'url' => ['/site/about']],
-            ['label' => 'Contact', 'url' => ['/site/contact']],
+            ['label' => 'Главная', 'url' => ['/']],
             Yii::$app->user->isGuest ? (
-                ['label' => 'Login', 'url' => ['/site/login']]
+                ''
+            ) : (['label' => 'Управление', 'url' => ['/site/settings']]),
+            Yii::$app->user->isGuest ? (
+                '<li class="nav-item">'.$this->render('/modals/login'). '</li>'
             ) : (
-                '<li>'
+            [
+                ['label' => 'Страница 1', 'url' => ['/site/page1']],
+                ['label' => 'Страница 2', 'url' => ['/site/page2']],
+                '<li class="nav-item">'
                 . Html::beginForm(['/site/logout'], 'post')
                 . Html::submitButton(
-                    'Logout (' . Yii::$app->user->identity->username . ')',
+                    'Выход (' . Yii::$app->user->identity->username . ')',
                     ['class' => 'btn btn-link logout']
                 )
                 . Html::endForm()
                 . '</li>'
-            )
+            ]
+            ),
+
         ],
     ]);
     NavBar::end();
@@ -62,7 +68,12 @@ AppAsset::register($this);
         <?= Breadcrumbs::widget([
             'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
         ]) ?>
-        <?= Alert::widget() ?>
+        <?= Alert::widget([
+            'options' => [
+                'class' => 'alert alert-warning alert-dismissible fade',
+                'role' => 'alert'
+            ]
+        ]) ?>
         <?= $content ?>
     </div>
 </div>
