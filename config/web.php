@@ -9,6 +9,7 @@ $db = file_exists(__DIR__ . '/db_local.php')
 $config = [
     'id' => 'basic',
     'basePath' => dirname(__DIR__),
+    'homeUrl' => '/',
     'name' => 'Dashboard',
     'language' => 'ru-RU',
     'sourceLanguage' => 'ru-RU',
@@ -21,6 +22,9 @@ $config = [
         'request' => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
             'cookieValidationKey' => '8hKOL7yEp8_2fCd258rgjo44vOL-oslL',
+        ],
+        'authManager' => [
+            'class'=>'\yii\rbac\DbManager'
         ],
         'cache' => [
             'class' => 'yii\caching\FileCache',
@@ -72,7 +76,7 @@ if (YII_ENV_DEV) {
     $config['modules']['gii'] = [
         'class' => 'yii\gii\Module',
         // uncomment the following to add your IP if you are not connecting from localhost.
-        //'allowedIPs' => ['127.0.0.1', '::1'],
+        'allowedIPs' => ['*'],
     ];
 }
 

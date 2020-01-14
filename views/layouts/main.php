@@ -32,31 +32,28 @@ AppAsset::register($this);
         'brandLabel' => Yii::$app->name,
         'brandUrl' => Yii::$app->homeUrl,
         'options' => [
-            'class' => 'navbar navbar-expand-lg navbar-dark elegant-color-dark',
+            'class' => 'navbar navbar-expand-lg navbar-dark teal',
         ],
     ]);
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav ml-auto'],
         'items' => [
-            ['label' => 'Главная', 'url' => ['/']],
+            ['label' => 'Главная', 'url' => [Yii::$app->homeUrl]],
             Yii::$app->user->isGuest ? (
                 ''
             ) : (['label' => 'Управление', 'url' => ['/site/settings']]),
             Yii::$app->user->isGuest ? (
                 '<li class="nav-item">'.$this->render('/modals/login'). '</li>'
             ) : (
-            [
-                ['label' => 'Страница 1', 'url' => ['/site/page1']],
-                ['label' => 'Страница 2', 'url' => ['/site/page2']],
                 '<li class="nav-item">'
-                . Html::beginForm(['/site/logout'], 'post')
-                . Html::submitButton(
-                    'Выход (' . Yii::$app->user->identity->username . ')',
-                    ['class' => 'btn btn-link logout']
-                )
-                . Html::endForm()
+                . Html::a('Страница 1', '/site/page1', ['class' => 'nav-link waves-effect waves-light'])
+                . '</li>'.
+                '<li class="nav-item">'
+                . Html::a('Страница 2', '/site/page2', ['class' => 'nav-link waves-effect waves-light'])
+                . '</li>'.
+                '<li class="nav-item">'
+                . Html::a('Выход (' . Yii::$app->user->identity->username . ')', '/site/logout', ['class' => 'nav-link waves-effect waves-light'])
                 . '</li>'
-            ]
             ),
 
         ],
@@ -78,11 +75,70 @@ AppAsset::register($this);
     </div>
 </div>
 
-<footer class="footer">
-    <div class="container">
-        <p class="pull-left">&copy; My Company <?= date('Y') ?></p>
+<footer class="page-footer font-small teal pt-4">
+    <div class="container-fluid text-center text-md-left">
+        <!-- Footer Links -->
+        <div class="container-fluid text-center text-md-left">
 
-        <p class="pull-right"><?= Yii::powered() ?></p>
+            <!-- Grid row -->
+            <div class="row">
+
+                <!-- Grid column -->
+                <div class="col-md-6 mt-md-0 mt-3">
+
+                    <!-- Content -->
+                    <h5 class="text-uppercase">Footer Content</h5>
+                    <p>Here you can use rows and columns to organize your footer content.</p>
+
+                </div>
+                <!-- Grid column -->
+
+                <hr class="clearfix w-100 d-md-none pb-3">
+
+                <!-- Grid column -->
+                <div class="col-md-3 mb-md-0 mb-3">
+
+                    <!-- Links -->
+                    <h5 class="text-uppercase">Links</h5>
+
+                    <ul class="list-unstyled">
+                        <li>
+                            <a href="#!">Link 1</a>
+                        </li>
+                        <li>
+                            <a href="#!">Link 2</a>
+                        </li>
+                    </ul>
+
+                </div>
+                <!-- Grid column -->
+
+                <!-- Grid column -->
+                <div class="col-md-3 mb-md-0 mb-3">
+
+                    <!-- Links -->
+                    <h5 class="text-uppercase">Links</h5>
+
+                    <ul class="list-unstyled">
+                        <li>
+                            <a href="#!">Link 1</a>
+                        </li>
+                        <li>
+                            <a href="#!">Link 2</a>
+                        </li>
+                    </ul>
+
+                </div>
+                <!-- Grid column -->
+
+            </div>
+            <!-- Grid row -->
+
+        </div>
+        <!-- Footer Links -->
+    </div>
+    <div class="footer-copyright text-center py-3">© <?= date('Y') ?> Copyright:
+        <a href="/"> My Company</a>
     </div>
 </footer>
 

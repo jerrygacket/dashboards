@@ -25,7 +25,7 @@ class AppAsset extends AssetBundle
         'css/solid.min.css',
         'css/mdb.min.css',
 //        'css/chart.min.css',
-//        'css/style.css',
+        'css/style.css',
 //        'css/site.css',
     ];
     public $js = [

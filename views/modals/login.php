@@ -11,7 +11,7 @@ use yii\bootstrap4\Modal;
 $model = new LoginForm();
 $form = ActiveForm::begin([
     'id' => 'login-form',
-    'action' => '/site/login',
+    'action' => Yii::$app->homeUrl.'site/login',
     'fieldConfig' => [
         'template' => "{input}\n{label}\n{hint}\n{error}",
     ]
@@ -33,7 +33,7 @@ Modal::begin([
 echo '<div class="md-form mb-5">
       <i class="fas fa-user prefix grey-text"></i>';
 echo $form->field($model, 'username', ['options' => ['tag' => false,]])
-    ->textInput(['class' => 'form-control validate ml-5', 'style' => 'color:#495057;'])
+    ->textInput(['required'=>true, 'class' => 'form-control validate ml-5', 'style' => 'color:#495057;'])
     ->label('Логин')
 ;
 echo '</div>';
