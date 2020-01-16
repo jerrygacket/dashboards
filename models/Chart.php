@@ -3,6 +3,9 @@
 namespace app\models;
 
 use Yii;
+use yii\behaviors\TimestampBehavior;
+use yii\db\ActiveRecord;
+use yii\db\Expression;
 
 /**
  * This is the model class for table "chart".
@@ -14,44 +17,32 @@ use Yii;
  * @property string|null $options
  * @property string $created_on
  * @property string $updated_on
+ *
+ * @property Files[] $files
  */
-class Chart extends \yii\db\ActiveRecord
+class Chart extends ChartBase
 {
-    /**
-     * {@inheritdoc}
-     */
-    public static function tableName()
+    public $uploadedFile = '';
+
+    public function behaviors()
     {
-        return 'chart';
+        return [
+            [
+                'class' => TimestampBehavior::className(),
+                'attributes' => [
+                    ActiveRecord::EVENT_BEFORE_INSERT => ['created_on', 'updated_on'],
+                    ActiveRecord::EVENT_BEFORE_UPDATE => ['updated_on'],
+                ],
+                'value' => new Expression('NOW()')
+            ]
+        ];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function rules()
     {
-        return [
-            [['title', 'type'], 'required'],
-            [['description', 'options'], 'string'],
-            [['created_on', 'updated_on'], 'safe'],
-            [['title'], 'string', 'max' => 256],
-            [['type'], 'string', 'max' => 32],
-        ];
+        return array_merge([
+            ['uploadedFile','file','extensions' => ['txt','csv'],'maxFiles' => 1],
+        ], parent::rules());
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function attributeLabels()
-    {
-        return [
-            'id' => Yii::t('app', 'ID'),
-            'title' => Yii::t('app', 'Title'),
-            'type' => Yii::t('app', 'Type'),
-            'description' => Yii::t('app', 'Description'),
-            'options' => Yii::t('app', 'Options'),
-            'created_on' => Yii::t('app', 'Created On'),
-            'updated_on' => Yii::t('app', 'Updated On'),
-        ];
-    }
 }

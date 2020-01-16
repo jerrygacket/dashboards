@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\models\Chart;
 use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
@@ -9,6 +10,7 @@ use yii\web\Response;
 use yii\filters\VerbFilter;
 use app\models\LoginForm;
 use app\models\ContactForm;
+use yii\web\UploadedFile;
 
 class SiteController extends Controller
 {
@@ -142,12 +144,22 @@ class SiteController extends Controller
     }
 
     /**
-     * Displays page1.
+     * Displays page2.
      *
      * @return string
      */
     public function actionPage2()
     {
         return $this->render('page2');
+    }
+
+    /**
+     * Displays settings.
+     *
+     * @return string
+     */
+    public function actionSettings()
+    {
+        return $this->render('settings');
     }
 }

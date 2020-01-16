@@ -14,7 +14,8 @@ class m200114_140549_create_users_table extends Migration
     {
         $this->createTable('{{%users}}', [
             'id' => $this->primaryKey(),
-            //'email'=>$this->string(150)->notNull(),
+            'login'=>$this->string(150)->notNull(),
+            'active'=>$this->boolean()->notNull(),
             'password_hash'=>$this->string('300')->notNull(),
             'token'=>$this->string('300'),
             'auth_key'=>$this->string('300'),
@@ -23,7 +24,7 @@ class m200114_140549_create_users_table extends Migration
             'updated_on'=>$this->timestamp()->notNull()
                 ->defaultExpression('CURRENT_TIMESTAMP'),
         ]);
-        //$this->createIndex('users_emailInd','users','email',true);
+        $this->createIndex('users_loginInd','users','login',true);
         $this->execute('');
     }
 

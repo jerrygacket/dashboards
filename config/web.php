@@ -1,5 +1,7 @@
 <?php
 
+use app\components\RbacComponent;
+
 $params = require __DIR__ . '/params.php';
 
 $db = file_exists(__DIR__ . '/db_local.php')
@@ -23,10 +25,10 @@ $config = [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
             'cookieValidationKey' => '8hKOL7yEp8_2fCd258rgjo44vOL-oslL',
         ],
-        'authManager' => [
-            'class'=>'\yii\rbac\DbManager'
-        ],
-        'rbac'=>['class'=>\app\components\RbacComponent::class],
+//        'authManager' => [
+//            'class'=>'\yii\rbac\DbManager'
+//        ],
+//        'rbac'=>['class'=> RbacComponent::class],
         'cache' => [
             'class' => 'yii\caching\FileCache',
         ],
@@ -78,6 +80,7 @@ if (YII_ENV_DEV) {
         'class' => 'yii\gii\Module',
         // uncomment the following to add your IP if you are not connecting from localhost.
         'allowedIPs' => ['*'],
+        //'allowedIPs' => ['127.0.0.1', '::1'],
     ];
 }
 

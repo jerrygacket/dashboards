@@ -17,6 +17,8 @@ class m200114_134743_chart extends Migration
             'id'=>$this->primaryKey(),
             'title'=>$this->string(256)->notNull(),
             'type'=>$this->string(32)->notNull(),
+            'file'=>$this->string(32),
+            'active'=>$this->boolean(),
             'description'=>$this->text(),
             'options'=>$this->json(),
             'created_on'=>$this->timestamp()->notNull()
