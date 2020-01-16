@@ -20,7 +20,7 @@ use yii\bootstrap4\Html;
         ]);?>
 
         <?=$form->field($model,'id')->hiddenInput()->label(false);?>
-        <?=$form->field($model,'active')->hiddenInput(['value' => '0'])->label(false);?>
+        <?=$form->field($model,'active')->hiddenInput(['value' => '1'])->label(false);?>
 
         <?=$form->field($model,'title',['enableClientValidation'=>false,
             'enableAjaxValidation'=>true]);?>
@@ -30,11 +30,9 @@ use yii\bootstrap4\Html;
 
 
         <?php // выводим уже существующие рисунки если есть
-        if (!empty($model->files)) {
-            echo '<h3>Существующие файлы</h3>';
-            foreach ($model->files as $file) {
-                echo '/files/'.$file;
-            }
+        if (!empty($model->file)) {
+            echo '<h3>Существующий файл</h3>';
+            echo \yii\helpers\Html::a($model->file,'/files/'.$model->id.'/'.$model->file);
         } else {
             echo '<h3>Нет файлов</h3>';
         }

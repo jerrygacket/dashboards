@@ -6,9 +6,8 @@ namespace app\controllers;
 
 use app\base\BaseController;
 use app\models\Chart;
-use app\models\Files;
 use yii\bootstrap4\ActiveForm;
-use yii\helpers\FileHelper;
+use yii\data\ActiveDataProvider;
 use yii\web\Response;
 use yii\web\UploadedFile;
 
@@ -16,12 +15,29 @@ class ChartController extends BaseController
 {
     public function actionIndex () {
         $model = new Chart();
+        $model->load(\Yii::$app->request->queryParams);
+        $query = $model::find();
+        $provider = new ActiveDataProvider([
+            'query' => $query,
+            'pagination' => [
+                'pageSize' => 5
+            ],
+            'sort' => [
+                'defaultOrder' => [
+                    'id'=>SORT_DESC
+                ]
+            ]
+        ]);
 
-        return $this->render('index', ['charts' => $model::find()->all()]);
+        return $this->render('index', [
+            'provider' => $provider,
+        ]);
     }
 
     public function actionView () {
+        $model = new Chart();
 
+        return $this->render('view',['model'=> $model::findOne(['id' => \Yii::$app->request->queryParams['id'] ?? ''])]);
     }
 
     public function actionCreate () {
@@ -32,34 +48,22 @@ class ChartController extends BaseController
                     \Yii::$app->response->format=Response::FORMAT_JSON;
                     return ActiveForm::validate($model);
                 }
-                if ($model->save()) {
-                    $model->uploadedFile = UploadedFile::getInstance($model, 'uploadedFile');
-                    if(!empty($model->uploadedFile)) {
-                        FileHelper::createDirectory(\Yii::getAlias('@webroot/files'));
-                        $path=\Yii::getAlias('@webroot/files/'.uniqid().'.csv');
-                        if(!$model->uploadedFile->saveAs($path)){
-                            $model->addError('file','Не удалось сохранить файл');
-                        }else{
-                            $newFile = new Files();
-                            $newFile->chart_id = $model->id;
-                            $newFile->filename = basename($path);
-                            if ($newFile->save()) {
-                                $model->file_id = $newFile->id;
-                                $model->save();
-                            }
-                            print_r($newFile->errors);
-                            \Yii::$app->end(0);
-                        }
-
-                    }
-                    return $this->render('view',['model'=>$model]);
+                $model->uploadedFile = UploadedFile::getInstance($model, 'uploadedFile');
+                $model->file = uniqid().'.csv';
+                if ($model->save() && $model->upload()) {
+//                    return $this->render('view',['model'=>$model]);
+                    return \Yii::$app->runAction('/chart/view', ['id' => $model->id]);
                 } else {
                     print_r($model->errors);
                     \Yii::$app->end(0);
                 }
             }
-
         }
-        return $this->render('create', ['model' => $model]);
+
+        return $this->render('create', [
+            'model' => $model::findOne([
+                'id' => \Yii::$app->request->queryParams['id'] ?? ''
+            ]) ?? $model
+        ]);
     }
 }

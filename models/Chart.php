@@ -6,6 +6,8 @@ use Yii;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 use yii\db\Expression;
+use yii\helpers\FileHelper;
+use yii\web\UploadedFile;
 
 /**
  * This is the model class for table "chart".
@@ -17,8 +19,7 @@ use yii\db\Expression;
  * @property string|null $options
  * @property string $created_on
  * @property string $updated_on
- *
- * @property Files[] $files
+ * @property UploadedFile $uploadedFile
  */
 class Chart extends ChartBase
 {
@@ -43,6 +44,25 @@ class Chart extends ChartBase
         return array_merge([
             ['uploadedFile','file','extensions' => ['txt','csv'],'maxFiles' => 1],
         ], parent::rules());
+    }
+
+    public function upload() {
+        if($this->validate()){
+            $path = \Yii::getAlias('@webroot/files/'.$this->id);
+            FileHelper::createDirectory($path);
+            $fileName=$path.'/'.$this->file;
+//            is_uploaded_file($this->uploadedFile->tempName) ?
+//                $this->uploadedFile->saveAs($fileName) :
+//                rename($this->uploadedFile->tempName,$fileName);
+            if(!$this->uploadedFile->saveAs($fileName)){
+                $this->addError('file','Не удалось сохранить файл');
+                return false;
+            } else {
+                return true;
+            }
+        }
+
+        return false;
     }
 
 }
