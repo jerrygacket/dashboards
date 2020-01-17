@@ -11,6 +11,7 @@ if (!empty($model->id)) {
             'title:html',
             'description:html',
             'type:html',
+            'page:html',
             'active:html',
             'options:html',
             'created_on:html',

@@ -11,7 +11,7 @@ use yii\bootstrap4\Html;
 ?>
 <div class="row">
     <div class="col-12">
-        <?= $model->id ? '<h1>Редактровать график</h1>' : '<h1>Создать график</h1>' ?>
+        <?= $model->id ? '<h1>Редактировать график</h1>' : '<h1>Создать график</h1>' ?>
 
         <?php $form=ActiveForm::begin([
             'options' => [

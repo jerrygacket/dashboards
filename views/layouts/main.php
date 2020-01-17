@@ -48,7 +48,7 @@ use yii\bootstrap4\NavBar;
         ['label' => 'Главная', 'url' => [Yii::$app->homeUrl]],
     ];
     if (Yii::$app->user->isGuest) {
-        $menuItems[] = '<li class="nav-item">'.$this->render('/modals/login'). '</li>';
+        //$menuItems[] = '<li class="nav-item">'.$this->render('/modals/login'). '</li>';
     } else {
         if (Yii::$app->user->identity->username == 'admin') {
             $menuItems[] = ['label' => 'Управление', 'url' => ['/site/settings']];

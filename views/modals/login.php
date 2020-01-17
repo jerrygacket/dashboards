@@ -27,7 +27,8 @@ Modal::begin([
         'label' => 'Вход',
         'tag' => 'a',
         'type' => '',
-        'class' => 'nav-link waves-effect waves-light',
+        'class' => 'btn btn-primary bnt-large',
+//        'class' => 'nav-link waves-effect waves-light',
     ],
 ]);
 echo '<div class="md-form mb-5">
