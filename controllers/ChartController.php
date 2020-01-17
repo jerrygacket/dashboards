@@ -24,7 +24,7 @@ class ChartController extends BaseController
             ],
             'sort' => [
                 'defaultOrder' => [
-                    'id'=>SORT_DESC
+                    'id'=>SORT_ASC
                 ]
             ]
         ]);
@@ -41,7 +41,9 @@ class ChartController extends BaseController
     }
 
     public function actionCreate () {
-        $model = new Chart();
+        $model = Chart::findOne([
+            'id' => \Yii::$app->request->queryParams['id'] ?? ''
+        ]) ?? new Chart();
         if (\Yii::$app->request->isPost) {
             if ($model->load(\Yii::$app->request->post())) {
                 if (\Yii::$app->request->isAjax) {
@@ -51,8 +53,8 @@ class ChartController extends BaseController
                 $model->uploadedFile = UploadedFile::getInstance($model, 'uploadedFile');
                 $model->file = uniqid().'.csv';
                 if ($model->save() && $model->upload()) {
-//                    return $this->render('view',['model'=>$model]);
-                    return \Yii::$app->runAction('/chart/view', ['id' => $model->id]);
+                    return $this->render('view',['model'=>$model, 'la']);
+                    //return \Yii::$app->runAction('/chart/view', ['id' => $model->id]);
                 } else {
                     print_r($model->errors);
                     \Yii::$app->end(0);
@@ -60,10 +62,6 @@ class ChartController extends BaseController
             }
         }
 
-        return $this->render('create', [
-            'model' => $model::findOne([
-                'id' => \Yii::$app->request->queryParams['id'] ?? ''
-            ]) ?? $model
-        ]);
+        return $this->render('create', ['model' => $model]);
     }
 }

@@ -16,6 +16,7 @@ use Yii;
  * @property string|null $options
  * @property string $created_on
  * @property string $updated_on
+ * @property string|null $page
  */
 class ChartBase extends \yii\db\ActiveRecord
 {
@@ -39,6 +40,7 @@ class ChartBase extends \yii\db\ActiveRecord
             [['created_on', 'updated_on'], 'safe'],
             [['title'], 'string', 'max' => 256],
             [['type', 'file'], 'string', 'max' => 32],
+            [['page'], 'string', 'max' => 255],
         ];
     }
 
@@ -57,6 +59,7 @@ class ChartBase extends \yii\db\ActiveRecord
             'options' => Yii::t('app', 'Options'),
             'created_on' => Yii::t('app', 'Created On'),
             'updated_on' => Yii::t('app', 'Updated On'),
+            'page' => Yii::t('app', 'Page'),
         ];
     }
 }
