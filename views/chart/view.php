@@ -32,16 +32,5 @@ if (!empty($model->id)) {
     }
     echo '<br>' . \yii\bootstrap\Html::a('Редактировать', ['/chart/create', 'id' => $model->id], ['class' => 'btn btn-primary']);
     echo '<br>' . \yii\helpers\Html::a('Все графики', '/chart/index', ['class' => 'btn btn-info']);
-} ?>
-
-<div class="">
-    <div class="badge badge-primary"><?=$model->id?></div>
-    <div class="chart-container">
-        <canvas id="chart_<?=$model->id?>"></canvas>
-    </div>
-</div>
-
-<script>
-    var ctx = document.getElementById('chart_<?=$model->id?>').getContext('2d');
-    var Chart<?=$model->id?> = new Chart(ctx, <?=json_encode($model->getChartData())?>);
-</script>
+    echo $this->render('_chart', ['model' => $model]);
+}

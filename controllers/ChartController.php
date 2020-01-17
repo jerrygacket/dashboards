@@ -51,9 +51,14 @@ class ChartController extends BaseController
                     return ActiveForm::validate($model);
                 }
                 $model->uploadedFile = UploadedFile::getInstance($model, 'uploadedFile');
-                $model->file = uniqid().'.csv';
-                if ($model->save() && $model->upload()) {
-                    return $this->render('view',['model'=>$model, 'la']);
+                if ($model->uploadedFile) {
+                    $model->file = uniqid().'.csv';
+                }
+                if ($model->save()) {
+                    if ($model->uploadedFile) {
+                        $model->upload();
+                    }
+                    return $this->render('view',['model'=>$model]);
                     //return \Yii::$app->runAction('/chart/view', ['id' => $model->id]);
                 } else {
                     print_r($model->errors);

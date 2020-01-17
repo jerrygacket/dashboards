@@ -15,6 +15,7 @@ use yii\web\UploadedFile;
  * @property int $id
  * @property string $title
  * @property string $type
+ * @property string $page
  * @property string|null $description
  * @property string|null $options
  * @property string $created_on
@@ -75,8 +76,28 @@ class Chart extends ChartBase
     {
         return array_merge([
             ['uploadedFile','file','extensions' => ['txt','csv'], 'checkExtensionByMimeType' => false, 'maxFiles' => 1],
+            ['page', 'trim'],
+            ['type', 'required'],
+            ['type', 'trim'],
         ], parent::rules());
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function attributeLabels()
+    {
+        return [
+            'id' => 'ID',
+            'title' => 'Название',
+            'description' => 'Описание',
+            'type' => 'Тип',
+            'page' => 'Страница',
+            'options' => 'Опции (json-строка)',
+            'uploadedFile' => 'Файл с данными',
+        ];
+    }
+
 
     public function upload() {
         if (!$this->uploadedFile) {

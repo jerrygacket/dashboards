@@ -4,6 +4,7 @@ namespace app\controllers;
 
 use app\models\Chart;
 use Yii;
+use yii\data\ActiveDataProvider;
 use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\Response;
@@ -138,19 +139,12 @@ class SiteController extends Controller
      *
      * @return string
      */
-    public function actionPage1()
+    public function actionChartPage()
     {
-        return $this->render('page1');
-    }
+        $pageId = \Yii::$app->request->queryParams['id'] ?? '1';
+        $charts = Chart::find()->where(['page' => 'page'.$pageId])->all();
 
-    /**
-     * Displays page2.
-     *
-     * @return string
-     */
-    public function actionPage2()
-    {
-        return $this->render('page2');
+        return $this->render('chartPage', ['charts' => $charts]);
     }
 
     /**

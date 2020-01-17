@@ -44,28 +44,49 @@ use yii\bootstrap4\NavBar;
             'class' => 'navbar navbar-expand-lg navbar-dark teal',
         ],
     ]);
+    $menuItems = [
+        ['label' => 'Главная', 'url' => [Yii::$app->homeUrl]],
+    ];
+    if (Yii::$app->user->isGuest) {
+        $menuItems[] = '<li class="nav-item">'.$this->render('/modals/login'). '</li>';
+    } else {
+        if (Yii::$app->user->identity->username == 'admin') {
+            $menuItems[] = ['label' => 'Управление', 'url' => ['/site/settings']];
+        }
+
+        $chartPages = \app\models\ChartPage::find()->all();
+//        $pageItems = [];
+        foreach ($chartPages as $chartPage) {
+//            $pageItems[] = ['label' => $chartPage->title, 'url' => ['/site/chart-page?id='.$chartPage->id]];
+            $menuItems[] = ['label' => $chartPage->title, 'url' => ['/site/chart-page?id='.$chartPage->id]];
+        }
+//        $menuItems[] = ['label' => 'Страницы', 'items' => $pageItems];
+
+        $menuItems[] = ['label' => 'Выход (' . Yii::$app->user->identity->username . ')', 'url' => ['//site/logout']];
+    }
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav ml-auto'],
-        'items' => [
-            ['label' => 'Главная', 'url' => [Yii::$app->homeUrl]],
-            Yii::$app->user->isGuest ? (
-                ''
-            ) : (['label' => 'Управление', 'url' => ['/site/settings']]),
-            Yii::$app->user->isGuest ? (
-                '<li class="nav-item">'.$this->render('/modals/login'). '</li>'
-            ) : (
-                '<li class="nav-item">'
-                . Html::a('Страница 1', '/site/page1', ['class' => 'nav-link waves-effect waves-light'])
-                . '</li>'.
-                '<li class="nav-item">'
-                . Html::a('Страница 2', '/site/page2', ['class' => 'nav-link waves-effect waves-light'])
-                . '</li>'.
-                '<li class="nav-item">'
-                . Html::a('Выход (' . Yii::$app->user->identity->username . ')', '/site/logout', ['class' => 'nav-link waves-effect waves-light'])
-                . '</li>'
-            ),
-
-        ],
+        'items' => $menuItems,
+//        'items' => [
+//
+//            !Yii::$app->user->isGuest && Yii::$app->user->identity->username == 'admin' ? (
+//            ['label' => 'Управление', 'url' => ['/site/settings']]
+//            ) : (''),
+//            Yii::$app->user->isGuest ? (
+//                '<li class="nav-item">'.$this->render('/modals/login'). '</li>'
+//            ) : (
+//                '<li class="nav-item">'
+//                . Html::a('Страница 1', '/site/chart-page?id=1', ['class' => 'nav-link waves-effect waves-light'])
+//                . '</li>'.
+//                '<li class="nav-item">'
+//                . Html::a('Страница 2', '/site/chart-page?id=2', ['class' => 'nav-link waves-effect waves-light'])
+//                . '</li>'.
+//                '<li class="nav-item">'
+//                . Html::a('Выход (' . Yii::$app->user->identity->username . ')', '/site/logout', ['class' => 'nav-link waves-effect waves-light'])
+//                . '</li>'
+//            ),
+//
+//        ],
     ]);
     NavBar::end();
     ?>
@@ -84,70 +105,9 @@ use yii\bootstrap4\NavBar;
     </div>
 </div>
 
-<footer class="page-footer font-small teal pt-4">
-    <div class="container-fluid text-center text-md-left">
-        <!-- Footer Links -->
-        <div class="container-fluid text-center text-md-left">
-
-            <!-- Grid row -->
-            <div class="row">
-
-                <!-- Grid column -->
-                <div class="col-md-6 mt-md-0 mt-3">
-
-                    <!-- Content -->
-                    <h5 class="text-uppercase">Footer Content</h5>
-                    <p>Here you can use rows and columns to organize your footer content.</p>
-
-                </div>
-                <!-- Grid column -->
-
-                <hr class="clearfix w-100 d-md-none pb-3">
-
-                <!-- Grid column -->
-                <div class="col-md-3 mb-md-0 mb-3">
-
-                    <!-- Links -->
-                    <h5 class="text-uppercase">Links</h5>
-
-                    <ul class="list-unstyled">
-                        <li>
-                            <a href="#!">Link 1</a>
-                        </li>
-                        <li>
-                            <a href="#!">Link 2</a>
-                        </li>
-                    </ul>
-
-                </div>
-                <!-- Grid column -->
-
-                <!-- Grid column -->
-                <div class="col-md-3 mb-md-0 mb-3">
-
-                    <!-- Links -->
-                    <h5 class="text-uppercase">Links</h5>
-
-                    <ul class="list-unstyled">
-                        <li>
-                            <a href="#!">Link 1</a>
-                        </li>
-                        <li>
-                            <a href="#!">Link 2</a>
-                        </li>
-                    </ul>
-
-                </div>
-                <!-- Grid column -->
-
-            </div>
-            <!-- Grid row -->
-
-        </div>
-        <!-- Footer Links -->
-    </div>
+<footer class="page-footer font-small teal mt-4">
     <div class="footer-copyright text-center py-3">© <?= date('Y') ?> Copyright:
-        <a href="/"> My Company</a>
+        <a href="/"> Dashboard Inc.</a>
     </div>
 </footer>
 

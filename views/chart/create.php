@@ -24,8 +24,19 @@ use yii\bootstrap4\Html;
 
         <?=$form->field($model,'title',['enableClientValidation'=>false,
             'enableAjaxValidation'=>true]);?>
+        <?=$form->field($model,'page')->dropDownList(
+            \yii\helpers\ArrayHelper::map(\app\models\ChartPage::find()->all(),'name','title'),
+            [
+                'prompt' => 'Выберите страницу...'
+            ]
+        );?>
         <?=$form->field($model,'description')->textarea(['row'=>'3']);?>
-        <?=$form->field($model,'type')->textInput();?>
+        <?=$form->field($model,'type')->dropDownList(
+            \yii\helpers\ArrayHelper::map(\app\models\ChartType::find()->all(),'name','title'),
+            [
+                'prompt' => 'Выберите тип...'
+            ]
+        );?>
         <?=$form->field($model,'options')->textInput();?>
 
 
@@ -42,9 +53,9 @@ use yii\bootstrap4\Html;
 
         <div class="form-group">
             <button class="btn btn-success" type="submit">Сохранить</button>
+            <?= Html::a('Отмена',['/chart/index'], ['class' => 'btn btn-danger'])?>
         </div>
         <?php ActiveForm::end(); ?>
 
-        <?= Html::a('Отмена',['/site/settings'], ['class' => 'btn btn-danger'])?>
     </div>
 </div>
