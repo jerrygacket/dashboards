@@ -19,19 +19,27 @@ use yii\bootstrap4\NavBar;
     <?php $this->registerCsrfMetaTags() ?>
     <title><?= Html::encode($this->title) ?></title>
     <?php $this->head() ?>
+    <!-- Font Awesome -->
+<!--    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">-->
+    <!-- Google Fonts -->
+<!--    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap">-->
+    <!-- Bootstrap core CSS -->
+<!--    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet">-->
+    <!-- Material Design Bootstrap -->
+    <link href="/css/all.css" rel="stylesheet">
     <link href="/css/bootstrap.min.css" rel="stylesheet">
-    <link href="/css/fontawesome.min.css" rel="stylesheet">
     <link href="/css/solid.min.css" rel="stylesheet">
     <link href="/css/mdb.min.css" rel="stylesheet">
     <link href="/css/chart.min.css" rel="stylesheet">
     <link href="/css/style.css" rel="stylesheet">
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/popper.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+    <script src="/js/mdb.min.js"></script>
+    <script src="/js/chart.min.js"></script>
 </head>
 <body>
-<script src="/js/jquery.min.js"></script>
-<script src="/js/bootstrap.min.js"></script>
-<script src="/js/popper.min.js"></script>
-<script src="/js/mdb.min.js"></script>
-<script src="/js/chart.min.js"></script>
+
 
 <?php $this->beginBody() ?>
 
@@ -45,24 +53,33 @@ use yii\bootstrap4\NavBar;
         ],
     ]);
     $menuItems = [
-        ['label' => 'Главная', 'url' => [Yii::$app->homeUrl]],
+        '<li class="nav-item">'
+        .Html::a('<i class="fas fa-home"></i>', [Yii::$app->homeUrl], ['class' => 'nav-link waves-effect waves-light'])
+        . '</li>'
     ];
     if (Yii::$app->user->isGuest) {
         //$menuItems[] = '<li class="nav-item">'.$this->render('/modals/login'). '</li>';
+        echo '';
     } else {
         if (Yii::$app->user->identity->username == 'admin') {
-            $menuItems[] = ['label' => 'Управление', 'url' => ['/site/settings']];
+            $menuItems[] = '<li class="nav-item">'
+                .Html::a('<i class="fas fa-cogs"></i>', ['/site/settings'], ['class' => 'nav-link waves-effect waves-light'])
+                . '</li>';
+//                ['label' => 'Управление', 'url' => ['/site/settings']];
         }
 
         $chartPages = \app\models\ChartPage::find()->all();
-//        $pageItems = [];
+        $pageItems = [];
         foreach ($chartPages as $chartPage) {
-//            $pageItems[] = ['label' => $chartPage->title, 'url' => ['/site/chart-page?id='.$chartPage->id]];
-            $menuItems[] = ['label' => $chartPage->title, 'url' => ['/site/chart-page?id='.$chartPage->id]];
+            $pageItems[] = ['label' => $chartPage->title, 'url' => ['/site/chart-page?id='.$chartPage->id], 'options' => ['class' => 'btn btn-primary']];
+//            $menuItems[] = ['label' => $chartPage->title, 'url' => ['/site/chart-page?id='.$chartPage->id]];
         }
-//        $menuItems[] = ['label' => 'Страницы', 'items' => $pageItems];
+        $menuItems[] = ['label' => '<i class="fas fa-chart-line"></i>', 'items' => $pageItems, 'encode' => false];
 
-        $menuItems[] = ['label' => 'Выход (' . Yii::$app->user->identity->username . ')', 'url' => ['//site/logout']];
+        $menuItems[] = '<li class="nav-item">'
+            .Html::a('('. Yii::$app->user->identity->username .')'.'<i class="fas fa-sign-out-alt"></i>', ['/site/logout'], ['class' => 'nav-link waves-effect waves-light'])
+            . '</li>';
+//            ['label' => 'Выход (' . Yii::$app->user->identity->username . ')', 'url' => ['//site/logout']];
     }
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav ml-auto'],
@@ -91,26 +108,18 @@ use yii\bootstrap4\NavBar;
     NavBar::end();
     ?>
 
-    <div class="container">
-        <?= Breadcrumbs::widget([
-            'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
-        ]) ?>
-        <?= Alert::widget([
-            'options' => [
-                'class' => 'alert alert-warning alert-dismissible fade',
-                'role' => 'alert'
-            ]
-        ]) ?>
+    <?= isset($this->params['mainPage']) && $this->params['mainPage'] ? '' : '<div class="container-fluid">' ?>
         <?= $content ?>
-    </div>
+    <?= isset($this->params['mainPage']) && $this->params['mainPage'] ? '' : '</div>' ?>
 </div>
 
+<?php if (!isset($this->params['mainPage']) || !$this->params['mainPage']) { ?>
 <footer class="page-footer font-small teal mt-4">
     <div class="footer-copyright text-center py-3">© <?= date('Y') ?> Copyright:
         <a href="/"> Dashboard Inc.</a>
     </div>
 </footer>
-
+<?php } ?>
 <?php $this->endBody() ?>
 </body>
 </html>

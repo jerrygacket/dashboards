@@ -3,15 +3,14 @@
 namespace app\controllers;
 
 use app\models\Chart;
+use app\models\ChartPage;
 use Yii;
-use yii\data\ActiveDataProvider;
 use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\Response;
 use yii\filters\VerbFilter;
 use app\models\LoginForm;
 use app\models\ContactForm;
-use yii\web\UploadedFile;
 
 class SiteController extends Controller
 {
@@ -69,6 +68,9 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
+        if (!Yii::$app->user->isGuest) {
+            return $this->render('index');
+        }
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
             return $this->render('index');
@@ -151,9 +153,10 @@ class SiteController extends Controller
     public function actionChartPage()
     {
         $pageId = \Yii::$app->request->queryParams['id'] ?? '1';
+        $chartPage = ChartPage::find()->where(['id' => $pageId])->one();
         $charts = Chart::find()->where(['page' => 'page'.$pageId])->all();
 
-        return $this->render('chartPage', ['charts' => $charts]);
+        return $this->render('chartPage', ['charts' => $charts, 'chartPage' => $chartPage]);
     }
 
     /**
