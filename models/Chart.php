@@ -24,6 +24,7 @@ use yii\web\UploadedFile;
  */
 class Chart extends ChartBase
 {
+    const CHART_FILES_PATH = 'files/sftp-root/';
     const CHART_DEFAULTS = [
         'options' => [
             'responsive' => true,
@@ -54,7 +55,7 @@ class Chart extends ChartBase
         'rgba(153, 102, 255, 1)',
         'rgba(255, 159, 64, 1)'
     ];
-    const SEPARATOR = ',';
+    const SEPARATOR = ';';
 
     public $uploadedFile = '';
 
@@ -92,24 +93,25 @@ class Chart extends ChartBase
             'title' => 'Название',
             'description' => 'Описание',
             'type' => 'Тип',
+            'file' => 'Файл с данными',
             'page' => 'Страница',
             'options' => 'Опции (json-строка)',
             'uploadedFile' => 'Файл с данными',
         ];
     }
 
-
     public function upload() {
         if (!$this->uploadedFile) {
             return true;
         }
         if($this->validate()){
-            $path = \Yii::getAlias('@webroot/files/'.$this->id);
+            $path = \Yii::getAlias('@webroot/'.self::CHART_FILES_PATH.'/'.$this->id);
             FileHelper::createDirectory($path);
             $fileName=$path.'/'.$this->file;
 //            is_uploaded_file($this->uploadedFile->tempName) ?
 //                $this->uploadedFile->saveAs($fileName) :
 //                rename($this->uploadedFile->tempName,$fileName);
+            $this->uploadedFile->name;
             if(!$this->uploadedFile->saveAs($fileName)){
                 $this->addError('file','Не удалось сохранить файл');
                 return false;
@@ -121,8 +123,27 @@ class Chart extends ChartBase
         return false;
     }
 
+    public function getExampleData($type){
+        return file(\Yii::getAlias('@webroot/'.self::CHART_FILES_PATH.$type.'.csv'));
+    }
+
+    public function getUTF8Data($fileName) {
+        $enc = shell_exec('file -bi '.$fileName);
+        if (substr_count($enc, 'charset=utf-8') === 0) {
+            shell_exec('iconv -f cp1251 -t utf-8 -o '.$fileName.' '.$fileName);
+        }
+        $result = trim(file_get_contents($fileName));
+
+        return explode(PHP_EOL, $result);
+    }
+
     public function getChartData() {
-        $strings = file('files/'.$this->id.'/'.$this->file);
+//        $strings = file('files/'.$this->id.'/'.$this->file);
+        $chartFile = \Yii::getAlias('@webroot/'.self::CHART_FILES_PATH.$this->file);
+        $strings = file_exists($chartFile)
+            ? $this->getUTF8Data($chartFile)
+            : $this->getExampleData($this->type);
+
         $colNames = explode(self::SEPARATOR, array_shift($strings));
         $dataNames = explode(self::SEPARATOR, array_shift($strings));
         $data = [];
@@ -151,7 +172,7 @@ class Chart extends ChartBase
     public function getXValues($names, $data) {
         $xIndex = array_search('x', $names);
 
-        return array_column($data, $xIndex);
+        return array_column($data, $xIndex ? $xIndex : 0);
     }
 
     public function getYValues($columns, $names, $data) {
@@ -165,7 +186,7 @@ class Chart extends ChartBase
             }
         }
         foreach ($yIndexes as $key => $yIndex) {
-            $yData = array_column($data, $yIndex);
+            $yData = array_column($data, $yIndex  ? $yIndex : 1);
             $colorCount = count($yData);
             $result[] = [
                 'label' => $labels[$key],

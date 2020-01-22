@@ -27,7 +27,8 @@ if (!empty($model->id)) {
         ],
     ]);
     if (!empty($model->file)){
-        echo \yii\helpers\Html::a($model->file,'/files/'.$model->id.'/'.$model->file);
+//        echo \yii\helpers\Html::a($model->file,'/files/'.$model->id.'/'.$model->file);
+        echo \yii\helpers\Html::a($model->file, $model::CHART_FILES_PATH.$model->file);
     } else {
         echo '<p>Нет файлов</p>';
     }

@@ -12,5 +12,7 @@
 
 <script>
     let ctx<?=$model->id?> = document.getElementById('chart_<?=$model->id?>').getContext('2d');
-    let Chart<?=$model->id?> = new Chart(ctx<?=$model->id?>, <?=json_encode($model->getChartData())?>);
+    let Chart<?=$model->id?> = new Chart(ctx<?=$model->id?>,
+        <?=json_encode($model->getChartData())?>
+    );
 </script>
