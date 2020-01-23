@@ -3,20 +3,84 @@
 namespace app\models;
 
 use Yii;
+use yii\web\IdentityInterface;
 
-/**
- * This is the  extended model class for table "users".
- *
- * @property int $id
- * @property string $password_hash
- * @property string|null $token
- * @property string|null $auth_key
- * @property string $created_on
- * @property string $updated_on
- * @property string $login
- * @property int $active
- */
-class Users extends UsersBase
+class Users extends UsersBase implements IdentityInterface
 {
+    public $password;
 
+    const SCENARIO_REGISTRATION = 'reg_scenario';
+    const SCENARIO_AUTHORIZATION = 'auth_scenario';
+
+    public function setRegistrationScenario(){
+        $this->setScenario(self::SCENARIO_REGISTRATION);
+        return $this;
+    }
+
+    public function setAuthorizationScenario(){
+        $this->setScenario(self::SCENARIO_AUTHORIZATION);
+        return $this;
+    }
+
+    public function getUsername(){
+        return $this->username;
+    }
+
+    public function rules()
+    {
+        return array_merge([
+            [['password'],'string','min'=>6],
+            ['username','unique','on' => self::SCENARIO_REGISTRATION],
+            ['username','exist','on' => self::SCENARIO_AUTHORIZATION],
+        ], parent::rules()
+        );
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public static function findIdentity($id)
+    {
+        return Users::find()->andWhere(['id'=>$id])->one();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public static function findIdentityByAccessToken($token, $type = null)
+    {
+        // TODO: Implement findIdentityByAccessToken() method.
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getAuthKey()
+    {
+        return $this->auth_key;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function setAuthKey($authKey)
+    {
+        $this->auth_key = $authKey;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function validateAuthKey($authKey)
+    {
+        return $this->auth_key == $authKey;
+    }
 }
