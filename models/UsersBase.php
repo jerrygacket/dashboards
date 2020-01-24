@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use yii\db\ActiveRecord;
 
 /**
  * This is the model class for table "users".
@@ -16,7 +17,7 @@ use Yii;
  * @property string $created_on
  * @property string $updated_on
  */
-class UsersBase extends \yii\db\ActiveRecord
+class UsersBase extends ActiveRecord
 {
     /**
      * {@inheritdoc}
@@ -37,7 +38,7 @@ class UsersBase extends \yii\db\ActiveRecord
             [['created_on', 'updated_on'], 'safe'],
             [['username'], 'string', 'max' => 150],
             [['password_hash', 'token', 'auth_key'], 'string', 'max' => 300],
-            [['username'], 'unique'],
+            //[['username'], 'unique'],
         ];
     }
 

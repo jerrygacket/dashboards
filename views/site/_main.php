@@ -17,7 +17,7 @@ $chartPages = ChartPage::find()->all();
 
             <?php
             foreach ($chartPages as $chartPage) { ?>
-                <a href="/site/chart-page?id=<?= $chartPage->id ?>" class="btn btn-outline-white btn-lg waves-effect waves-light">
+                <a href="/chart/chart-page?id=<?= $chartPage->id ?>" class="btn btn-outline-white btn-lg waves-effect waves-light">
                     <?= $chartPage->title ?>
                     <i class="fas fa-graduation-cap ml-2"></i>
                 </a>

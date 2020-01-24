@@ -1,5 +1,6 @@
 <?php
 
+use app\components\AuthComponent;
 use app\components\RbacComponent;
 
 $params = require __DIR__ . '/params.php';
@@ -21,7 +22,7 @@ $config = [
         '@npm'   => '@vendor/npm-asset',
     ],
     'components' => [
-        'auth' => ['class'=>\app\components\AuthComponent::class,'nameClass'=>'\app\models\Users'],
+        'auth' => ['class'=> AuthComponent::class,'nameClass'=>'\app\models\Users'],
         'assetManager' => [
             'bundles' => [
                 'yii\web\JqueryAsset' => [
@@ -39,10 +40,8 @@ $config = [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
             'cookieValidationKey' => '8hKOL7yEp8_2fCd258rgjo44vOL-oslL',
         ],
-//        'authManager' => [
-//            'class'=>'\yii\rbac\DbManager'
-//        ],
-//        'rbac'=>['class'=> RbacComponent::class],
+        'authManager' => ['class'=>'\yii\rbac\DbManager'],
+        'rbac'=>['class'=> RbacComponent::class],
         'cache' => [
             'class' => 'yii\caching\FileCache',
         ],

@@ -32,8 +32,19 @@ echo $form->field($model,'type')->dropDownList(
 echo $form->field($model,'options')->textInput();
 
 $files = array_diff(scandir(\Yii::getAlias('@webroot/'.$model::CHART_FILES_PATH)), array('..', '.'));
+$notDirs = [];
+foreach ($files as $file) {
+    is_dir(\Yii::getAlias('@webroot/'.$model::CHART_FILES_PATH) . $file)
+        ? ''
+        : $notDirs[] = $file;
+}
+$items = array_combine($notDirs, $notDirs);
+if (!empty($model->file)) {
+    $items[$model->file] = 'Выбраный - '.$model->file;
+}
+
 echo $form->field($model,'file')->dropDownList(
-    array_combine($files, $files),
+    $items,
     [
         'prompt' => 'Выберите файл...'
     ]
@@ -48,7 +59,9 @@ echo $form->field($model,'file')->dropDownList(
 //}
 
 
-//echo $form->field($model,'uploadedFile')->fileInput()?>
+echo $form->field($model,'uploadedFile')->fileInput();
+
+?>
 
 <div class="form-group">
     <button class="btn btn-success" type="submit">Сохранить</button>

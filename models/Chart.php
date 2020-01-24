@@ -20,7 +20,8 @@ use yii\web\UploadedFile;
  * @property string|null $options
  * @property string $created_on
  * @property string $updated_on
- * @property UploadedFile $uploadedFile
+ * @property string|null $localFile
+  * @property UploadedFile $uploadedFile
  */
 class Chart extends ChartBase
 {
@@ -93,10 +94,10 @@ class Chart extends ChartBase
             'title' => 'Название',
             'description' => 'Описание',
             'type' => 'Тип',
-            'file' => 'Файл с данными',
+            'file' => 'Локальный файл',
             'page' => 'Страница',
             'options' => 'Опции (json-строка)',
-            'uploadedFile' => 'Файл с данными',
+            'uploadedFile' => 'Сторонний файл (имеет приоритет перед локальным)',
         ];
     }
 
@@ -105,13 +106,10 @@ class Chart extends ChartBase
             return true;
         }
         if($this->validate()){
-            $path = \Yii::getAlias('@webroot/'.self::CHART_FILES_PATH.'/'.$this->id);
+            $path = \Yii::getAlias('@webroot/'.self::CHART_FILES_PATH);
             FileHelper::createDirectory($path);
             $fileName=$path.'/'.$this->file;
-//            is_uploaded_file($this->uploadedFile->tempName) ?
-//                $this->uploadedFile->saveAs($fileName) :
-//                rename($this->uploadedFile->tempName,$fileName);
-            $this->uploadedFile->name;
+            $this->checkDir(dirname($fileName));
             if(!$this->uploadedFile->saveAs($fileName)){
                 $this->addError('file','Не удалось сохранить файл');
                 return false;
@@ -121,6 +119,12 @@ class Chart extends ChartBase
         }
 
         return false;
+    }
+
+    public function checkDir($dir) {
+        if (!is_dir($dir)) {
+            mkdir($dir, 0755, true);
+        }
     }
 
     public function getExampleData($type){

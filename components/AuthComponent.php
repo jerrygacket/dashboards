@@ -25,19 +25,19 @@ class AuthComponent extends Component
      */
     public function authUser(&$model):bool{
         $model->setAuthorizationScenario();
-        if(!$model->validate(['login','password'])){
+        if(!$model->validate(['username','password'])){
+            $model->addError('username','Неверный пользователь или пароль');
+            $model->addError('password','Неверный пользователь или пароль');
             return false;
         }
         $user = $this->getUserFromLogin($model->username);
-        if(
-            empty($user) ||
-            !$this->checkPassword($model->password,$user->password_hash)
-        ){
+        if(empty($user) || !$this->checkPassword($model->password,$user->password_hash)) {
+            $model->addError('username','Неверный пользователь или пароль');
             $model->addError('password','Неверный пользователь или пароль');
         }
         $model->addError('password',print_r($model,true));
 
-        return \Yii::$app->user->login($user,3600);
+        return \Yii::$app->user->login($user,$model->rememberMe ? 0 : 3600);
     }
 
     private function checkPassword($password,$password_hash){

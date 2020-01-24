@@ -71,7 +71,7 @@ use yii\bootstrap4\NavBar;
         $chartPages = \app\models\ChartPage::find()->all();
         $pageItems = [];
         foreach ($chartPages as $chartPage) {
-            $pageItems[] = ['label' => $chartPage->title, 'url' => ['/site/chart-page?id='.$chartPage->id], 'options' => ['class' => 'btn btn-primary']];
+            $pageItems[] = ['label' => $chartPage->title, 'url' => ['/chart/chart-page?id='.$chartPage->id], 'options' => ['class' => 'btn btn-primary']];
 //            $menuItems[] = ['label' => $chartPage->title, 'url' => ['/site/chart-page?id='.$chartPage->id]];
         }
         $menuItems[] = ['label' => '<i class="fas fa-chart-line"></i>', 'items' => $pageItems, 'encode' => false];

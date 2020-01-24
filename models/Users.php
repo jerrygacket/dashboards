@@ -2,12 +2,12 @@
 
 namespace app\models;
 
-use Yii;
 use yii\web\IdentityInterface;
 
 class Users extends UsersBase implements IdentityInterface
 {
     public $password;
+    public $rememberMe = false;
 
     const SCENARIO_REGISTRATION = 'reg_scenario';
     const SCENARIO_AUTHORIZATION = 'auth_scenario';
@@ -29,7 +29,7 @@ class Users extends UsersBase implements IdentityInterface
     public function rules()
     {
         return array_merge([
-            [['password'],'string','min'=>6],
+            ['password','string','min'=>6, 'message' => 'Короткий пароль'],
             ['username','unique','on' => self::SCENARIO_REGISTRATION],
             ['username','exist','on' => self::SCENARIO_AUTHORIZATION],
         ], parent::rules()
