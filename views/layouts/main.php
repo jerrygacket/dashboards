@@ -63,7 +63,10 @@ use yii\bootstrap4\NavBar;
     } else {
         if (Yii::$app->user->identity->username == 'admin') {
             $menuItems[] = '<li class="nav-item">'
-                .Html::a('<i class="fas fa-cogs"></i>', ['/site/settings'], ['class' => 'nav-link waves-effect waves-light'])
+                .Html::a('<i class="fas fa-cogs"></i>', ['/chart/index'], ['class' => 'nav-link waves-effect waves-light'])
+                . '</li>';
+            $menuItems[] = '<li class="nav-item">'
+                .Html::a('<i class="fas fa-users"></i>', ['/user/index'], ['class' => 'nav-link waves-effect waves-light'])
                 . '</li>';
 //                ['label' => 'Управление', 'url' => ['/site/settings']];
         }

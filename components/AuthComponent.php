@@ -68,6 +68,23 @@ class AuthComponent extends Component
         return false;
     }
 
+    /**
+     * @param $model Users
+     * @return bool
+     */
+    public function updateUser(&$model):bool{
+        $model->setUpdateScenario();
+        if ($model->password != '') {
+            $model->password_hash=$this->hashPassword($model->password);
+            $model->auth_key=$this->generateAuthKey();
+        }
+        if($model->save()){
+            return true;
+        }
+
+        return false;
+    }
+
     private function generateAuthKey(){
         return \Yii::$app->security->generateRandomString();
     }

@@ -11,6 +11,7 @@ class Users extends UsersBase implements IdentityInterface
 
     const SCENARIO_REGISTRATION = 'reg_scenario';
     const SCENARIO_AUTHORIZATION = 'auth_scenario';
+    const SCENARIO_UPDATE = 'upd_scenario';
 
     public function setRegistrationScenario(){
         $this->setScenario(self::SCENARIO_REGISTRATION);
@@ -22,6 +23,11 @@ class Users extends UsersBase implements IdentityInterface
         return $this;
     }
 
+    public function setUpdateScenario(){
+        $this->setScenario(self::SCENARIO_UPDATE);
+        return $this;
+    }
+
     public function getUsername(){
         return $this->username;
     }
@@ -29,11 +35,27 @@ class Users extends UsersBase implements IdentityInterface
     public function rules()
     {
         return array_merge([
-            ['password','string','min'=>6, 'message' => 'Короткий пароль'],
-            ['username','unique','on' => self::SCENARIO_REGISTRATION],
+            ['password','string','min'=>6, 'message' => 'Короткий пароль','on' => self::SCENARIO_REGISTRATION],
+            ['username','unique','on' => self::SCENARIO_REGISTRATION, 'message' => 'Такой пользователь уже есть'],
+            ['password','string','on' => self::SCENARIO_UPDATE],
             ['username','exist','on' => self::SCENARIO_AUTHORIZATION],
         ], parent::rules()
         );
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function attributeLabels()
+    {
+        return [
+            'id' => 'ID',
+            'title' => 'Название',
+            'description' => 'Описание',
+            'username' => 'Логин',
+            'password' => 'Пароль',
+            'active' => 'Действующий пользователь',
+        ];
     }
 
     /**
