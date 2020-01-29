@@ -22,7 +22,7 @@ class ChartController extends BaseController
 
         $model = new Chart();
         $model->load(\Yii::$app->request->queryParams);
-        $query = $model::find();
+        $query = $model::find()->andWhere(['active' => '1']);
         $provider = new ActiveDataProvider([
             'query' => $query,
             'pagination' => [
@@ -86,6 +86,26 @@ class ChartController extends BaseController
         return $this->render('create', ['model' => $model]);
     }
 
+    public function actionDelete() {
+        $this->rbac = $this->getRbac();
+        if (!$this->rbac->canCreateChat()) {
+            return $this->redirect('/site/forbidden');
+        }
+
+        $model = Chart::findOne(['id' => \Yii::$app->request->queryParams['id'] ?? '']);
+        if ($model) {
+            $model->active = 0;
+            if ($model->save()) {
+                return $this->redirect('index');
+            } else {
+                print_r($model->errors);
+                \Yii::$app->end(0);
+            }
+        }
+
+        return $this->redirect('index');
+    }
+
     /**
      * Displays page1.
      *
@@ -100,7 +120,7 @@ class ChartController extends BaseController
 
         $pageId = \Yii::$app->request->queryParams['id'] ?? '1';
         $chartPage = ChartPage::find()->where(['id' => $pageId])->one();
-        $charts = Chart::find()->where(['page' => 'page'.$pageId])->all();
+        $charts = Chart::find()->where(['page' => 'page'.$pageId])->andWhere(['active' => 1])->all();
 
         return $this->render('chartPage', ['charts' => $charts, 'chartPage' => $chartPage]);
     }

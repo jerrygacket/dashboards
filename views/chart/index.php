@@ -27,7 +27,7 @@ use yii\helpers\Html; ?>
         [
             'class' => '\yii\grid\ActionColumn',
             'header' => 'Действия',
-            'template' => '{view} {create}',
+            'template' => '{view}&nbsp;&nbsp; {create} &nbsp;&nbsp; {delete}',
             'controller' => 'chart',
             'buttons' => [
                 'view' => function ($url, $model, $key) {
@@ -35,6 +35,9 @@ use yii\helpers\Html; ?>
                 },
                 'create' => function ($url, $model, $key) {
                     return Html::a('<i class="fas fa-edit"></i>', $url);
+                },
+                'delete' => function ($url, $model, $key) {
+                    return Html::a('<i class="fas fa-times" style="color:red"></i>', $url);
                 },
             ]
         ],
