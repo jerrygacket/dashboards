@@ -7,6 +7,7 @@ use yii\web\IdentityInterface;
 class Users extends UsersBase implements IdentityInterface
 {
     public $password;
+    public $newPassword = '';
     public $rememberMe = false;
 
     const SCENARIO_REGISTRATION = 'reg_scenario';
@@ -34,13 +35,12 @@ class Users extends UsersBase implements IdentityInterface
 
     public function rules()
     {
-        return array_merge([
-            ['password','string','min'=>6, 'message' => 'Короткий пароль','on' => self::SCENARIO_REGISTRATION],
+        return array_merge(parent::rules(), [
+            ['password','string','min'=>6, 'message' => 'Короткий пароль'],
+            //['newPassword','string','min'=>6,'on' => self::SCENARIO_UPDATE, 'message' => 'Короткий пароль'],
             ['username','unique','on' => self::SCENARIO_REGISTRATION, 'message' => 'Такой пользователь уже есть'],
-            ['password','string','on' => self::SCENARIO_UPDATE],
             ['username','exist','on' => self::SCENARIO_AUTHORIZATION],
-        ], parent::rules()
-        );
+        ]);
     }
 
     /**
@@ -54,6 +54,8 @@ class Users extends UsersBase implements IdentityInterface
             'description' => 'Описание',
             'username' => 'Логин',
             'password' => 'Пароль',
+            'newPassword' => 'Новый пароль',
+//            'password' => \Yii::t('app', 'Password'),
             'active' => 'Действующий пользователь',
         ];
     }

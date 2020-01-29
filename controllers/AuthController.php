@@ -33,7 +33,12 @@ class AuthController extends Controller
         $model = $this->component->getModel();
 
         if (Yii::$app->request->isPost) {
-            $model->load(\Yii::$app->request->post());
+            if(!$model->load(\Yii::$app->request->post())) {
+//                print_r(\Yii::$app->request->post());
+//                print_r($model);
+//                Yii::$app->end(0);
+            }
+
             if($this->component->authUser($model)){
                 return $this->redirect(['/site/index']);
             }

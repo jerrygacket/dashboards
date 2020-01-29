@@ -34,6 +34,7 @@ class AuthComponent extends Component
         if(empty($user) || !$this->checkPassword($model->password,$user->password_hash)) {
             $model->addError('username','Неверный пользователь или пароль');
             $model->addError('password','Неверный пользователь или пароль');
+            return false;
         }
         $model->addError('password',print_r($model,true));
 
@@ -73,10 +74,13 @@ class AuthComponent extends Component
      * @return bool
      */
     public function updateUser(&$model):bool{
-        $model->setUpdateScenario();
-        if ($model->password != '') {
-            $model->password_hash=$this->hashPassword($model->password);
-            $model->auth_key=$this->generateAuthKey();
+        //$model->setUpdateScenario();
+        if ($model->newPassword != '') {
+            $model->password = $model->newPassword;
+            if ($model->validate('password')) {
+                $model->password_hash=$this->hashPassword($model->password);
+                $model->auth_key=$this->generateAuthKey();
+            }
         }
         if($model->save()){
             return true;
