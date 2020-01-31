@@ -16,11 +16,11 @@ class m200131_093636_add_chart_demos extends Migration
             'title','type','file','active', 'page', 'options'],[
             ['test1','bar','bar.csv', '1', 'page1', ''],
             ['test2','doughnut','doughnut.csv', '1', 'page1', '{"circumference":3.14,"rotation":3.14}'],
-            ['test3','line','bar.csv', '1', 'page1', '{"scales":{"yAxes":[{"ticks":{"beginAtZero":true}}]}}'],
+            ['test3','line','line.csv', '1', 'page1', '{"scales":{"yAxes":[{"ticks":{"beginAtZero":true}}]}}'],
             ['test4','horizontalBar','horizontalBar.csv', '1', 'page1', ''],
             ['test5','bar','bar.csv', '1', 'page2', ''],
             ['test6','doughnut','doughnut.csv', '1', 'page2', '{"circumference":3.14,"rotation":3.14}'],
-            ['test7','line','bar.csv', '1', 'page2', '{"scales":{"yAxes":[{"ticks":{"beginAtZero":true}}]}}'],
+            ['test7','line','line.csv', '1', 'page2', '{"scales":{"yAxes":[{"ticks":{"beginAtZero":true}}]}}'],
             ['test8','horizontalBar','horizontalBar.csv', '1', 'page2', ''],
         ]);
     }
