@@ -59,8 +59,8 @@ class AuthComponent extends Component
      */
     public function createUser(&$model):bool{
         $model->setRegistrationScenario();
-        $model->password_hash=$this->hashPassword($model->password);
-        $model->auth_key=$this->generateAuthKey();
+        $model->password_hash = $this->hashPassword($model->password);
+        $model->auth_key = $this->generateAuthKey();
         $model->active = 1;
         if($model->save()){
             return true;
