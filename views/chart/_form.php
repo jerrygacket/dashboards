@@ -31,7 +31,9 @@ echo $form->field($model,'type')->dropDownList(
 );
 echo $form->field($model,'options')->textInput();
 
-$files = array_diff(scandir(\Yii::getAlias('@webroot/'.$model::CHART_FILES_PATH)), array('..', '.'));
+$files = is_dir(\Yii::getAlias('@webroot/'.$model::CHART_FILES_PATH))
+    ? array_diff(scandir(\Yii::getAlias('@webroot/'.$model::CHART_FILES_PATH)), array('..', '.'))
+    : [];
 $notDirs = [];
 foreach ($files as $file) {
     is_dir(\Yii::getAlias('@webroot/'.$model::CHART_FILES_PATH) . $file)
