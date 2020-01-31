@@ -13,7 +13,7 @@ class m200131_083316_add_demo_users extends Migration
     public function safeUp()
     {
         $this->batchInsert('users',[
-            'login','active','password_hash'],[
+            'username','active','password_hash'],[
             ['admin',true,\Yii::$app->security->generatePasswordHash('123456')],
             ['user',true,\Yii::$app->security->generatePasswordHash('123456')],
         ]);
