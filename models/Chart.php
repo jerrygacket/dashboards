@@ -128,7 +128,8 @@ class Chart extends ChartBase
     }
 
     public function getExampleData($type){
-        return file(\Yii::getAlias('@webroot/'.self::CHART_FILES_PATH.$type.'.csv'));
+        $fileName = \Yii::getAlias('@webroot/'.self::CHART_FILES_PATH.$type.'.csv');
+        return file_exists($fileName) ? file($fileName) : [];
     }
 
     public function getUTF8Data($fileName) {
