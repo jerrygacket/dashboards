@@ -45,7 +45,13 @@ class Chart extends ChartBase
         'rgba(255, 206, 86, 0.4)',
         'rgba(75, 192, 192, 0.4)',
         'rgba(153, 102, 255, 0.4)',
-        'rgba(255, 159, 64, 0.4)'
+        'rgba(255, 159, 64, 0.4)',
+        'rgba(255, 99, 132, 0.4)',
+        'rgba(54, 162, 235, 0.4)',
+        'rgba(255, 206, 86, 0.4)',
+        'rgba(75, 192, 192, 0.4)',
+        'rgba(153, 102, 255, 0.4)',
+        'rgba(255, 159, 64, 0.4)',
     ];
 
     const COLORS = [
@@ -54,7 +60,13 @@ class Chart extends ChartBase
         'rgba(255, 206, 86, 1)',
         'rgba(75, 192, 192, 1)',
         'rgba(153, 102, 255, 1)',
-        'rgba(255, 159, 64, 1)'
+        'rgba(255, 159, 64, 1)',
+        'rgba(255, 99, 132, 1)',
+        'rgba(54, 162, 235, 1)',
+        'rgba(255, 206, 86, 1)',
+        'rgba(75, 192, 192, 1)',
+        'rgba(153, 102, 255, 1)',
+        'rgba(255, 159, 64, 1)',
     ];
     const SEPARATOR = ';';
 
@@ -135,9 +147,13 @@ class Chart extends ChartBase
     public function getUTF8Data($fileName) {
         $enc = shell_exec('file -bi '.$fileName);
         if (substr_count($enc, 'charset=utf-8') === 0) {
+            // charset=[\w\W]+
+//            $tmp = explode(';',$enc);
+//            $coding = explode('=', trim($tmp[1]));
             shell_exec('iconv -f cp1251 -t utf-8 -o '.$fileName.' '.$fileName);
+//            shell_exec('iconv -f '.$coding[1].' -t utf-8 -o '.$fileName.' '.$fileName);
         }
-        $result = trim(file_get_contents($fileName));
+        $result = str_replace(',','.', trim(file_get_contents($fileName)));
 
         return explode(PHP_EOL, $result);
     }
@@ -212,7 +228,7 @@ class Chart extends ChartBase
             return array_slice(self::BG_COLORS, 0, $count);
         }
 
-        return self::BG_COLORS[$current];
+        return self::BG_COLORS[$current] ?? 'rgba(255, 99, 132, 0.4)';
     }
 
     public function getBorderColors($current, $count, $type) {
@@ -220,7 +236,7 @@ class Chart extends ChartBase
             return array_slice(self::COLORS, 0, $count);
         }
 
-        return self::COLORS[$current];
+        return self::COLORS[$current] ?? 'rgba(255, 99, 132, 1)';
     }
 
 }
