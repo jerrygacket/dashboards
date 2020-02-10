@@ -11,9 +11,22 @@ body {
     position: relative;
     height: 100%;
     width: 100%;
+    min-height: 300px;
 }
 
 .badge {
     position: absolute;
     bottom: 0;
+}
+
+.logo-img {
+    width: 100%;
+    height: auto;
+    max-width: 163px;
+    max-height: 80px;
+}
+
+.dark-footer {
+    background: #282828;
+    color: #aeaeae;
 }

@@ -46,10 +46,10 @@ use yii\bootstrap4\NavBar;
 <div class="wrap">
     <?php
     NavBar::begin([
-        'brandLabel' => Yii::$app->name,
+        'brandLabel' => '<img class="logo-img" src="/img/logo.svg">',//Yii::$app->name,
         'brandUrl' => Yii::$app->homeUrl,
         'options' => [
-            'class' => 'navbar navbar-expand-lg navbar-dark teal',
+            'class' => 'navbar navbar-expand-lg navbar-light',
         ],
     ]);
     $menuItems = [
@@ -73,8 +73,8 @@ use yii\bootstrap4\NavBar;
 
         $chartPages = \app\models\ChartPage::find()->all();
         $pageItems = [];
-        foreach ($chartPages as $chartPage) {
-            $pageItems[] = ['label' => $chartPage->title, 'url' => ['/chart/chart-page?id='.$chartPage->id], 'options' => ['class' => 'btn btn-primary']];
+        foreach ($chartPages as $oneChartPage) {
+            $pageItems[] = ['label' => $oneChartPage->title, 'url' => ['/chart/chart-page?id='.$oneChartPage->id], 'options' => ['class' => 'btn btn-primary']];
 //            $menuItems[] = ['label' => $chartPage->title, 'url' => ['/site/chart-page?id='.$chartPage->id]];
         }
         $menuItems[] = ['label' => '<i class="fas fa-chart-line"></i>', 'items' => $pageItems, 'encode' => false];
@@ -84,6 +84,7 @@ use yii\bootstrap4\NavBar;
             . '</li>';
 //            ['label' => 'Выход (' . Yii::$app->user->identity->username . ')', 'url' => ['//site/logout']];
     }
+    echo '<span class="navbar-brand d-none d-sm-block" style="margin: 0 auto;">'.($this->params['header'] ?? '').'</span>';
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav ml-auto'],
         'items' => $menuItems,
@@ -117,7 +118,7 @@ use yii\bootstrap4\NavBar;
 </div>
 
 <?php if (!isset($this->params['mainPage']) || !$this->params['mainPage']) { ?>
-<footer class="page-footer font-small teal mt-4">
+<footer class="page-footer font-small mt-4 dark-footer">
     <div class="footer-copyright text-center py-3">© <?= date('Y') ?> Copyright:
         <a href="/"> Dashboard Inc.</a>
     </div>

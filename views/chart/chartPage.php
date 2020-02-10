@@ -8,6 +8,7 @@
 //echo '</pre>';
 if (!empty($chartPage)) {
     $this->title = $chartPage->title . ' - ' . Yii::$app->name;
+    $this->params = array_merge($this->params,['header' => $chartPage->title]);
 }
 ?>
 
