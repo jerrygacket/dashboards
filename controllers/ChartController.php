@@ -126,6 +126,6 @@ class ChartController extends BaseController
             $result[$chart->id] = $chart;
         }
 
-        return $this->render('chartPage', ['charts' => $result, 'chartPage' => $chartPage]);
+        return $this->render('chartPage-'.$pageId, ['charts' => $result, 'chartPage' => $chartPage]);
     }
 }

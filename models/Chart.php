@@ -208,7 +208,7 @@ class Chart extends ChartBase
             $result['options']['legend']['position'] = 'right';
         }
 
-        if ($result['type'] == 'doughnut') {
+        if ($result['type'] == 'doughnut' && !empty($result['data']['datasets'])) {
             $fact = $result['data']['datasets'][0]['data'][0];
             $plan = $result['data']['datasets'][0]['data'][1];
             $big = max($fact, $plan);
