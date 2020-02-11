@@ -121,7 +121,11 @@ class ChartController extends BaseController
         $pageId = \Yii::$app->request->queryParams['id'] ?? '1';
         $chartPage = ChartPage::find()->where(['id' => $pageId])->one();
         $charts = Chart::find()->where(['page' => 'page'.$pageId])->andWhere(['active' => 1])->all();
+        $result = [];
+        foreach ($charts as $chart) {
+            $result[$chart->id] = $chart;
+        }
 
-        return $this->render('chartPage', ['charts' => $charts, 'chartPage' => $chartPage]);
+        return $this->render('chartPage', ['charts' => $result, 'chartPage' => $chartPage]);
     }
 }

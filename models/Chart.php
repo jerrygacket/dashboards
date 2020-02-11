@@ -200,11 +200,61 @@ class Chart extends ChartBase
                     'text' => $this->title
                 ],
             ],
+            'comments' => $this->getComments($colNames, $dataNames, $data),
         ];
 
         $result = array_merge_recursive($result, ['options' => json_decode($this->options, true)]);
+        if (count($result['data']['datasets']) > 3) {
+            $result['options']['legend']['position'] = 'right';
+        }
+
+        if ($result['type'] == 'doughnut') {
+            $fact = $result['data']['datasets'][0]['data'][0];
+            $plan = $result['data']['datasets'][0]['data'][1];
+            $big = max($fact, $plan);
+            $small = min($fact, $plan);
+            $proc = $small / $big * 100;
+            if ($plan >= $fact) {
+                $result['data']['datasets'][0]['data'][0] = $proc;
+                $result['data']['datasets'][0]['data'][1] = 100 - $proc;
+            } else {
+                $result['data']['datasets'][0]['data'][1] = $proc;
+                $result['data']['datasets'][0]['data'][0] = 100 - $proc;
+            }
+            $result['real'][0] = $fact;
+            $result['real'][1] = $plan;
+        }
 
         return array_merge_recursive(self::CHART_DEFAULTS, $result);
+    }
+
+    public function getComments($columns, $names, $data) {
+        $cIndexes = [];
+        $labels = [];
+        $result = [];
+        foreach ($names as $key => $name) {
+            if (substr_count($name, 'k') > 0) {
+                $cIndexes[] = $key;
+                $labels[] = $columns[$key];
+            }
+        }
+        foreach ($cIndexes as $key => $cIndex) {
+            $yData = array_column($data, $cIndex ? $cIndex : 1);
+            foreach ($yData as &$value) {
+                $value = trim($value);
+                if ($value == '' || $value == '0') {
+                    $value = null;
+                }
+            }
+            $colorCount = count($yData);
+            $result[] = [
+                'label' => $labels[$key],
+                'data' => $yData,
+                'color' => $this->getBorderColors($key, $colorCount, $this->type),
+            ];
+        }
+
+        return $result;
     }
 
     public function getXValues($names, $data) {
@@ -242,8 +292,6 @@ class Chart extends ChartBase
             $result[] = [
                 'label' => $labels[$key],
                 'data' => $yData,
-//                'backgroundColor' => 'rgba(255, 99, 132, 0.4)',
-//                'borderColor' => 'rgba(255, 99, 132, 1)',
                 'backgroundColor' => self::getBGColors($key, $colorCount, $this->type),
                 'borderColor' => self::getBorderColors($key, $colorCount, $this->type),
                 'fill' => ( $this->type != 'line'),
