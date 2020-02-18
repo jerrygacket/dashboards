@@ -4,7 +4,7 @@ use app\models\ChartPage;
 
 $chartPages = ChartPage::find()->all();
 ?>
-<div class="view" style="background-image: url('/img/background.jpg'); background-repeat: no-repeat; background-size: cover; height: 845px;">
+<div class="view main-image">
 
     <!-- Mask & flexbox options-->
     <div class="mask rgba-black-light d-flex justify-content-center align-items-center">

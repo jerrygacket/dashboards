@@ -41,26 +41,26 @@ class Chart extends ChartBase
     ];
 
     const BG_COLORS = [
-        'rgba(255, 99, 132, 0.4)',
-        'rgba(54, 162, 235, 0.4)',
-        'rgba(255, 206, 86, 0.4)',
-        'rgba(75, 192, 192, 0.4)',
-        'rgba(153, 102, 255, 0.4)',
-        'rgba(255, 159, 64, 0.4)',
+        'rgba(255, 99, 132, 1)',
+        'rgba(54, 162, 235, 1)',
+        'rgba(255, 206, 86, 1)',
+        'rgba(75, 192, 192, 1)',
+        'rgba(153, 102, 255, 1)',
+        'rgba(255, 159, 64, 1)',
 
-        'rgba(99, 255, 132, 0.4)',
-        'rgba(162, 54, 235, 0.4)',
-        'rgba(206, 255, 86, 0.4)',
-        'rgba(192, 75, 192, 0.4)',
-        'rgba(102, 153, 255, 0.4)',
-        'rgba(159, 255, 64, 0.4)',
+        'rgba(99, 255, 132, 1)',
+        'rgba(162, 54, 235, 1)',
+        'rgba(206, 255, 86, 1)',
+        'rgba(192, 75, 192, 1)',
+        'rgba(102, 153, 255, 1)',
+        'rgba(159, 255, 64, 1)',
 
-        'rgba(99, 132, 255, 0.4)',
-        'rgba(162, 235, 54, 0.4)',
-        'rgba(206, 86, 255, 0.4)',
-        'rgba(192, 192, 75, 0.4)',
-        'rgba(102, 255, 153, 0.4)',
-        'rgba(159, 64, 255, 0.4)',
+        'rgba(99, 132, 255, 1)',
+        'rgba(162, 235, 54, 1)',
+        'rgba(206, 86, 255, 1)',
+        'rgba(192, 192, 75, 1)',
+        'rgba(102, 255, 153, 1)',
+        'rgba(159, 64, 255, 1)',
     ];
 
     const COLORS = [
@@ -208,12 +208,16 @@ class Chart extends ChartBase
             $result['options']['legend']['position'] = 'right';
         }
 
+        $callback = ($result['type'] == 'line' || $result['type'] == 'bar')
+            ? 'function(value,index,values) {return value.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1 ");}'
+            : null;
+
         if ($result['type'] == 'doughnut' && !empty($result['data']['datasets'])) {
             $fact = $result['data']['datasets'][0]['data'][0];
             $plan = $result['data']['datasets'][0]['data'][1];
             $big = max($fact, $plan);
             $small = min($fact, $plan);
-            $proc = $small / $big * 100;
+            $proc = round($small / $big * 100);
             if ($plan >= $fact) {
                 $result['data']['datasets'][0]['data'][0] = $proc;
                 $result['data']['datasets'][0]['data'][1] = 100 - $proc;
@@ -221,11 +225,16 @@ class Chart extends ChartBase
                 $result['data']['datasets'][0]['data'][1] = $proc;
                 $result['data']['datasets'][0]['data'][0] = 100 - $proc;
             }
-            $result['real'][0] = $fact;
-            $result['real'][1] = $plan;
+            $result['real'][0] = number_format($fact, 0, '.', ' ');
+            $result['real'][1] = number_format($plan, 0, '.', ' ');
+            $result['options']['tooltips']['enabled'] = false;
+        }
+        $result = array_merge_recursive(self::CHART_DEFAULTS, $result);
+        if ($callback) {
+            $result['options']['scales']['yAxes']['0']['ticks']['callback'] = '%function%';
         }
 
-        return array_merge_recursive(self::CHART_DEFAULTS, $result);
+        return ['data' => $result, 'json' => str_replace('"%function%"', $callback, json_encode($result))];
     }
 
     public function getComments($columns, $names, $data) {

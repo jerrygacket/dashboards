@@ -115,7 +115,7 @@ class ChartController extends BaseController
     {
         $this->rbac = $this->getRbac();
         if (!$this->rbac->canViewChat()) {
-            return $this->redirect('/site/forbidden');
+            return $this->redirect('/auth/login');
         }
 
         $pageId = \Yii::$app->request->queryParams['id'] ?? '1';

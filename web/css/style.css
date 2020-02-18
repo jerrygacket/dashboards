@@ -29,3 +29,23 @@ body {
     background: #282828;
     color: #aeaeae;
 }
+
+.main-image {
+    background-image: url('/img/background.jpg');
+    background-repeat: no-repeat;
+    background-position: 90%;
+    background-size: cover;
+    height: 845px;
+}
+
+
+@media (max-width: 576px) {
+    .main-image {
+        background-image: url('/img/background.jpg');
+        background-repeat: no-repeat;
+        background-position: 80% 0;
+        background-size: 270%;
+        height: 540px;
+    }
+}
+
