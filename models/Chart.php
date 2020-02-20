@@ -208,10 +208,6 @@ class Chart extends ChartBase
             $result['options']['legend']['position'] = 'right';
         }
 
-        $callback = ($result['type'] == 'line' || $result['type'] == 'bar')
-            ? 'function(value,index,values) {return value.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1 ");}'
-            : null;
-
         if ($result['type'] == 'doughnut' && !empty($result['data']['datasets'])) {
             $fact = $result['data']['datasets'][0]['data'][0];
             $plan = $result['data']['datasets'][0]['data'][1];
@@ -230,11 +226,35 @@ class Chart extends ChartBase
             $result['options']['tooltips']['enabled'] = false;
         }
         $result = array_merge_recursive(self::CHART_DEFAULTS, $result);
-        if ($callback) {
-            $result['options']['scales']['yAxes']['0']['ticks']['callback'] = '%function%';
-        }
 
-        return ['data' => $result, 'json' => str_replace('"%function%"', $callback, json_encode($result))];
+        return ['data' => $result, 'json' => $this->insertCallbacks($result)];
+    }
+
+    public function insertCallbacks(Array $data) {
+        $scalesCallback = 'function(value,index,values) {return value.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1 ");}';
+        $tooltipsCallback = 'function(tooltipItem, data) {
+            var label = data.datasets[tooltipItem.datasetIndex].label || \'\';
+            if (label) {
+                label += \': \';
+            }
+            
+            yVal = isNaN(tooltipItem.yLabel) ? tooltipItem.xLabel : tooltipItem.yLabel;
+            if (!yVal) {
+                yVal = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
+            }
+            
+            console.log(yVal);
+            label += Math.round(yVal).toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1 ")
+            return label;
+           }';
+
+        $data['options']['tooltips']['callbacks']['label'] = '%tooltipsFunction%';
+        if ($data['type'] == 'line' || $data['type'] == 'bar') {
+            $data['options']['scales']['yAxes']['0']['ticks']['callback'] = '%scalesFunction%';
+        }
+        $result = str_replace('"%tooltipsFunction%"', $tooltipsCallback, json_encode($data));
+
+        return str_replace('"%scalesFunction%"', $scalesCallback, $result);
     }
 
     public function getComments($columns, $names, $data) {

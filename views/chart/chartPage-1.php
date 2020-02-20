@@ -38,10 +38,10 @@ if (!empty($chartPage)) {
     <div class="col-md-6 col-12">
         <div class="row">
             <div class="col-md-6 col-12">
-                <?= $this->render('/chart/_chart', ['model' => $charts[5]]).PHP_EOL ?>
+                <?= $this->render('/chart/_chart', ['model' => $charts[6]]).PHP_EOL ?>
             </div>
             <div class="col-md-6 col-12">
-                <?= $this->render('/chart/_chart', ['model' => $charts[6]]).PHP_EOL ?>
+                <?= $this->render('/chart/_chart', ['model' => $charts[5]]).PHP_EOL ?>
             </div>
             <div class="col-md-6 col-12">
                 <?= $this->render('/chart/_chart', ['model' => $charts[7]]).PHP_EOL ?>
@@ -55,6 +55,11 @@ if (!empty($chartPage)) {
             <div class="col-md-6 col-12">
                 <?= $this->render('/chart/_chart', ['model' => $charts[10]]).PHP_EOL ?>
             </div>
+        </div>
+    </div>
+    <div class="col-md-6 col-12">
+        <?= $this->render('/chart/_chart', ['model' => $charts[13]]).PHP_EOL ?>
+        <div class="row">
             <div class="col-md-6 col-12">
                 <?= $this->render('/chart/_chart', ['model' => $charts[11]]).PHP_EOL ?>
             </div>
@@ -62,9 +67,6 @@ if (!empty($chartPage)) {
                 <?= $this->render('/chart/_chart', ['model' => $charts[12]]).PHP_EOL ?>
             </div>
         </div>
-    </div>
-    <div class="col-md-6 col-12">
-        <?= $this->render('/chart/_chart', ['model' => $charts[13]]).PHP_EOL ?>
     </div>
     <?php
 //        foreach ($charts as $model) {
