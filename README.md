@@ -5,8 +5,8 @@ Install:
 * cd dashboards
 * composer update
 * -- make config/db_local.php with your db config
-* php yii migrate
 * php yii migrate --migrationPath=@yii/rbac/migrations
+* php yii migrate
 * -- setup virtual host with server_root = project_dir/web
 * -- go to http://virtualhostname/rbac/gen to generate and assign roles
 there are must be a blank page.
